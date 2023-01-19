@@ -3,26 +3,33 @@
 <head>
 <title>Canvas Drawing</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-	<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
-<style>
-canvas{
+#options {
     position: absolute;
-    bottom: 30px;
+    top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 30px);
+    background-color: lightgray;
+    padding: 10px;
+    box-sizing: border-box;
 }
-#color, #size {
+canvas {
     position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
     bottom: 0;
 }
 </style>
 </head>
-<body
-style="height:100%;width:100%;margin:0;padding:0;overflow:hidden">
+<body style="height:100%;width:100%;margin:0;padding:0">
+<div id="options">
+    <input type="color" id="color" value="#000000">
+    <input type="range" id="size" min="1" max="50" value="10">
+</div>
 <canvas id="canvas"></canvas>
 <br>
 <input type="color" id="color" value="#000000">
@@ -63,6 +70,5 @@ canvas.onmousedown=function(e){draw=true;c.beginPath();c.moveTo(e.clientX,e.clie
 canvas.onmousemove=function(e){if(draw)c.lineTo(e.clientX,e.clientY);c.stroke()};
 canvas.onmouseup=function(){draw=false};
 </script>
-
 </body>
 </html>
