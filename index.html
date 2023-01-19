@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html manifest="manifest.json">
+<head>
+<title>Canvas Drawing</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+	<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+<style>
+canvas{border:1px solid;}
+</style>
+</head>
+<body
+style="height:100%;width:100%;margin:0;padding:0;overflow:hidden">
+<canvas id="canvas"></canvas>
+<br>
+<input type="color" id="color" value="#000000">
+<input type="range" id="size" min="1" max="50" value="10">
+<script>
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+var canvas=document.getElementById('canvas'),c=canvas.getContext('2d'),color=document.getElementById('color'),size=document.getElementById('size'),draw=false,touchPoints = [];
+canvas.width=innerWidth;canvas.height=innerHeight;
+c.lineCap='round';c.lineJoin='round';
+color.onchange=function(){c.strokeStyle=color.value};
+size.onchange=function(){c.lineWidth=size.value};
+//Add multitouch support
+canvas.addEventListener("touchstart", function(e){
+e.preventDefault();
+touchPoints = e.touches;
+for(var i = 0; i < touchPoints.length; i++){
+c.beginPath();
+c.moveTo(touchPoints[i].clientX, touchPoints[i].clientY);
+}
+}, false);
+
+canvas.addEventListener("touchmove", function(e){
+e.preventDefault();
+touchPoints = e.touches;
+for(var i = 0; i < touchPoints.length; i++){
+c.lineTo(touchPoints[i].clientX, touchPoints[i].clientY);
+c.stroke();
+}
+}, false);
+
+canvas.addEventListener("touchend", function(e){
+e.preventDefault();
+touchPoints = [];
+}, false);
+
+//Mouse events for non-touch devices
+canvas.onmousedown=function(e){draw=true;c.beginPath();c.moveTo(e.clientX,e.clientY)};
+canvas.onmousemove=function(e){if(draw)c.lineTo(e.clientX,e.clientY);c.stroke()};
+canvas.onmouseup=function(){draw=false};
+</script>
+
+</body>
+</html>
