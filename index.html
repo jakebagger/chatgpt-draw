@@ -53,47 +53,68 @@
   </div>
   <canvas id="canvas"></canvas>
   <script>
+    var isDrawing = false;
+    c.addEventListener("touchstart", function(e){
+  isDrawing = true;
+  lastX = e.targetTouches[0].pageX;
+  lastY = e.targetTouches[0].pageY - 50;
+});
+c.addEventListener("touchend", function(e){
+  isDrawing = false;
+});
+
+c.addEventListener("mousedown", function(e){
+  isDrawing = true;
+  lastX = e.clientX;
+  lastY = e.clientY - 50;
+});
+c.addEventListener("mouseup", function(e){
+  isDrawing = false;
+});
     var c=document.getElementById("canvas"),ctx=c.getContext("2d"),size=10,color='black',lastX,lastY;
     c.width=innerWidth;c.height=innerHeight-50;
     document.getElementById("brush-size").addEventListener("change", function(e){size=e.target.value;});
     document.getElementById("brush-color").addEventListener("change", function(e){color=e.target.value;});
-    c.addEventListener("touchmove",function(e){
-      e.preventDefault();
-      var x=e.targetTouches[0].pageX,y=e.targetTouches[0].pageY;
-      ctx.fillStyle=color;
-      ctx.lineWidth = size;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(x, y-50);
-      ctx.stroke();
-      lastX = x;
-      lastY = y-50;
-    },false);
-    c.addEventListener("mousemove",function(e){
-      var x=e.clientX,y=e.clientY;
-      ctx.fillStyle=color;
-      ctx.lineWidth = size;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.arc(x,y-50,size,0,2*Math.PI);
-      ctx.fill();
-    },false);
-    c.addEventListener("mousemove",function(e){
-      var x=e.clientX,y=e.clientY;
-      ctx.fillStyle=color;
-      ctx.beginPath();
-      ctx.arc(x,y-50,size,0,2*Math.PI);
-      ctx.fill();
-    },false);
+    c.addEventListener("touchmove", function(e){
+  e.preventDefault();
+  if (isDrawing) {
+    var x=e.targetTouches[0].pageX,y=e.targetTouches[0].pageY;
+    ctx.fillStyle=color;
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y-50);
+    ctx.stroke();
+    lastX = x;
+    lastY = y-50;
+  }
+},false);
+
+ c.addEventListener("mousemove", function(e){
+  if (isDrawing) {
+    var x=e.clientX,y=e.clientY;
+    ctx.fillStyle=color;
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.arc(x,y-50,size,0,2*Math.PI);
+    ctx.fill();
+  }
+},false);
     window.addEventListener('resize',()=>{
       c.width=innerWidth;c.height=innerHeight-50;
     });
     document.getElementById("clear-btn").addEventListener("click", function(){
     ctx.clearRect(0, 0, c.width, c.height);
     });
+    document.getElementById("clear-btn").addEventListener("click", function(){
+    ctx.clearRect(0, 0, c.width, c.height);
+  isDrawing = false;
+});
+
   </script>
   <script>
     if('serviceWorker' in navigator)
