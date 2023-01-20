@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
   <style>
     body{
-    overflow: hidden;
+    overflow:hidden;
     }
     canvas{width:100vw;height:calc(100vh - 50px);}
     #panel{
@@ -73,6 +73,10 @@
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.beginPath();
+  </script>
+  <script>
+    if('serviceWorker' in navigator)
+      navigator.serviceWorker.register('sw.js');
   </script>
 </body>
 </html>
