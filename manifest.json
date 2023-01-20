@@ -1,5 +1,5 @@
 {
-  "name": "Drawing App",
+  "name": "Draw App",
   "short_name": "Draw",
   "start_url": "./",
   "display": "standalone",
