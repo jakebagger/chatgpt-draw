@@ -4,24 +4,48 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
   <style>
     canvas{width:100vw;height:calc(100vh - 50px);}
-    #panel{position:absolute;top:0;left:0;width:100%;height:50px;background-color:#F5F5F5;}
-    #panel select,#panel input[type=color]{margin:10px;}
+    #panel{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:50px;
+      background-color:#F5F5F5;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    #brush-size{
+      width: 100px;
+    }
+    #brush-size::-webkit-slider-thumb{
+      -webkit-appearance: none;
+      width:20px;
+      height:20px;
+      border-radius: 50%;
+      background: #333;
+    }
+    #brush-size::-moz-range-thumb{
+      width:20px;
+      height:20px;
+      border-radius: 50%;
+      background: #333;
+    }
+    #brush-color{
+      width: 50px;
+      height: 20px;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
   <div id="panel">
-    <select id="brush-size">
-      <option value="2">2px</option>
-      <option value="5">5px</option>
-      <option value="10" selected>10px</option>
-      <option value="15">15px</option>
-      <option value="20">20px</option>
-    </select>
+    <input type="range" min="2" max="30" value="10" class="slider" id="brush-size">
     <input type="color" id="brush-color" value="#000000">
   </div>
   <canvas id="canvas"></canvas>
   <script>
-    var c=document.getElementById("canvas"),ctx=c.getContext("2d"),size=10,color='black';
+    var c=document.getElementById("canvas"),ctx=c.getContext("2d"),size=10,color='black',lastX,lastY;
     c.width=innerWidth;c.height=innerHeight-50;
     document.getElementById("brush-size").addEventListener("change", function(e){size=e.target.value;});
     document.getElementById("brush-color").addEventListener("change", function(e){color=e.target.value;});
@@ -29,24 +53,23 @@
       e.preventDefault();
       var x=e.targetTouches[0].pageX,y=e.targetTouches[0].pageY;
       ctx.fillStyle=color;
+      ctx.lineWidth = size;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.arc(x,y-50,size,0,2*Math.PI);
-      ctx.fill();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y-50);
+      ctx.stroke();
+      lastX = x;
+      lastY = y-50;
     },false);
     c.addEventListener("mousemove",function(e){
       var x=e.clientX,y=e.clientY;
       ctx.fillStyle=color;
+      ctx.lineWidth = size;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.arc(x,y-50,size,0,2*Math.PI);
-      ctx.fill();
-    },false);
-    window.addEventListener('resize',()=>{
-      c.width=innerWidth;c.height=innerHeight-50;
-    });
-  </script>
-  <script>
-    if('serviceWorker' in navigator)
-      navigator.serviceWorker.register('sw.js');
   </script>
 </body>
 </html>
